@@ -12,4 +12,4 @@ Given a topic, deliver a comprehensive lecture on it, from the fundamentals to t
 - Integrate exercises as checkpoints, letting readers attempt each one before seeing its solution.
 - Exploit the browser: figures, plots, animations, and interactive simulations wherever they make an idea clearer than prose can.
 
-Deliver one standalone HTML file, inlining assets where practical. Inline [style.css](assets/style.css) unchanged as the visual identity, build on its tokens and components, and extend it for anything it does not cover.
+Deliver one standalone HTML file; external libraries and fonts may load from CDNs. Inline [style.css](assets/style.css) unchanged as the visual identity, build on its tokens and components, and extend it for anything it does not cover. The lecture is about its topic alone and never refers to this skill.

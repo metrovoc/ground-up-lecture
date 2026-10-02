@@ -12,6 +12,12 @@
  *              </section>
  * Figures:     <figure> … <figcaption>…</figcaption></figure>
  *              Interactive figures: <figure class="interactive"> with native controls.
+ * Figure UI:   <div class="controls"><label>Rate <input type="range"> <output>2</output></label> …</div>
+ *              <div class="segmented" role="group"><button aria-pressed="true">A</button><button aria-pressed="false">B</button></div>
+ *              <dl class="stats"><div><dt>Delivered</dt><dd>12</dd></div> …</dl>
+ *              <ul class="legend"><li style="--swatch: var(--series-1)">Sent</li> …</ul>
+ *              <div class="scroll">…</div> lets a wide diagram scroll instead of shrinking.
+ *              Figure text renders at var(--figure-text) or larger; read it in canvas code.
  * Theme:       follows the system; force with <html data-theme="light|dark">.
  * Colors:      use the tokens below (var(--accent), var(--series-1) …) in custom
  *              CSS and figures so they work in both themes.
@@ -47,6 +53,7 @@
   --series-5: #f2a541;
 
   --radius: 8px;
+  --figure-text: 13px;
   --measure: 72ch;
   --toc-width: 248px;
   color-scheme: light;
@@ -206,6 +213,28 @@ figure { margin: 1.75rem 0; }
 figure > img, figure > svg, figure > canvas { display: block; max-width: 100%; height: auto; margin: 0 auto; }
 figcaption { margin-top: 0.6rem; font-size: 14px; color: var(--text-muted); }
 figure.interactive { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem; }
+
+.scroll { overflow-x: auto; }
+.scroll > svg, .scroll > canvas { min-width: 560px; }
+
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.25rem; margin: 0.75rem 0; font-size: 14px; }
+.controls label { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-muted); }
+output, .stats dd { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text); }
+output { min-width: 3ch; font-size: 14px; }
+
+.segmented { display: inline-flex; border: 1px solid var(--border-strong); border-radius: 6px; overflow: hidden; }
+.segmented button { border: 0; border-radius: 0; background: var(--bg); }
+.segmented button + button { border-left: 1px solid var(--border-strong); }
+.segmented button[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 0.5rem; margin: 0.75rem 0; }
+.stats > div { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.45rem 0.7rem; }
+.stats dt { font-size: 12px; color: var(--text-muted); }
+.stats dd { margin: 0; font-size: 16px; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; list-style: none; padding: 0; margin: 0.6rem 0; font-size: 13px; color: var(--text-muted); }
+.legend li { display: inline-flex; align-items: center; gap: 0.4rem; margin: 0; }
+.legend li::before { content: ""; width: 10px; height: 10px; border-radius: 2px; background: var(--swatch, var(--text-muted)); }
 
 /* Controls */
 
