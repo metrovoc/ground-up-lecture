@@ -10,5 +10,6 @@ Given a topic, deliver a comprehensive lecture on it, from the fundamentals to t
 - Keep it engaging and effortless to follow.
 - No compromises on depth, breadth, or accessibility.
 - Integrate exercises as checkpoints, letting readers attempt each one before seeing its solution.
+- Exploit the browser: figures, plots, animations, and interactive simulations wherever they make an idea clearer than prose can.
 
-Deliver one standalone HTML file, inlining assets where practical.
+Deliver one standalone HTML file, inlining assets where practical. Inline [style.css](assets/style.css) unchanged as the visual identity, build on its tokens and components, and extend it for anything it does not cover.
