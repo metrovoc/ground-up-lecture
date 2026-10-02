@@ -12,4 +12,4 @@ Given a topic, deliver a comprehensive lecture on it, from the fundamentals to t
 - Integrate exercises as checkpoints, letting readers attempt each one before seeing its solution.
 - Exploit the browser: figures, plots, animations, and interactive simulations wherever they make an idea clearer than prose can.
 
-Deliver one standalone HTML file built from [template.html](assets/template.html); external libraries and fonts may load from CDNs. Keep the template's shell, styles, and scripts unchanged, write the lecture into its `<main>`, and extend it for anything it does not cover.
+Deliver one standalone HTML file built from [template.html](assets/template.html); external libraries and fonts may load from CDNs.
