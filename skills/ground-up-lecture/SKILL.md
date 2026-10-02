@@ -1,7 +1,6 @@
 ---
 name: ground-up-lecture
-description: Turn any topic into a comprehensive, self-contained lecture, from the fundamentals to the deepest understanding, delivered as a single HTML file.
-disable-model-invocation: true
+description: Turn any topic into a comprehensive, self-contained lecture, from the fundamentals to the deepest understanding, delivered as a single HTML file. Use when asked to teach a topic in depth or to produce a lecture, textbook, or course.
 ---
 
 Given a topic, deliver a comprehensive lecture on it, from the fundamentals to the deepest understanding.
