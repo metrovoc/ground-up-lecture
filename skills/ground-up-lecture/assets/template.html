@@ -110,7 +110,7 @@ function lectureCanvas(canvas, draw) {
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0e1116;
     --surface: #161a21;
@@ -136,28 +136,30 @@ function lectureCanvas(canvas, draw) {
   }
 }
 
-:root[data-theme="dark"] {
-  --bg: #0e1116;
-  --surface: #161a21;
-  --surface-strong: #1d222b;
-  --text: #e6e9ee;
-  --text-muted: #9aa3b0;
-  --border: #262c36;
-  --border-strong: #3a424f;
-  --accent: #7aa2ff;
-  --accent-bg: #16213a;
-  --success: #4ade80;
-  --success-bg: #11261a;
-  --warning: #f5b454;
-  --warning-bg: #2a1f0e;
-  --violet: #b79cff;
-  --violet-bg: #211a36;
-  --series-1: #7aa2ff;
-  --series-2: #ff8a65;
-  --series-3: #4fd1c5;
-  --series-4: #e879b9;
-  --series-5: #f6c560;
-  color-scheme: dark;
+@media screen {
+  :root[data-theme="dark"] {
+    --bg: #0e1116;
+    --surface: #161a21;
+    --surface-strong: #1d222b;
+    --text: #e6e9ee;
+    --text-muted: #9aa3b0;
+    --border: #262c36;
+    --border-strong: #3a424f;
+    --accent: #7aa2ff;
+    --accent-bg: #16213a;
+    --success: #4ade80;
+    --success-bg: #11261a;
+    --warning: #f5b454;
+    --warning-bg: #2a1f0e;
+    --violet: #b79cff;
+    --violet-bg: #211a36;
+    --series-1: #7aa2ff;
+    --series-2: #ff8a65;
+    --series-3: #4fd1c5;
+    --series-4: #e879b9;
+    --series-5: #f6c560;
+    color-scheme: dark;
+  }
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -203,7 +205,7 @@ main {
 }
 .toc-floating .toc {
   bottom: auto;
-  max-height: calc(100vh - 5rem);
+  max-height: calc(100vh - 7.5rem);
   width: min(var(--toc-width) + 2rem, 100vw - 2rem);
   padding: 0.75rem;
   background: var(--bg);
