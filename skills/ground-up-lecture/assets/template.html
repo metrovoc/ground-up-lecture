@@ -9,13 +9,14 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script>
 (() => {
+  let theme, hidden;
   try {
-    const theme = localStorage.getItem("lecture-theme");
-    if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
-    const hidden = localStorage.getItem("lecture-contents") === "hidden";
-    const narrow = matchMedia("(max-width: 960px)").matches;
-    document.documentElement.classList.add(hidden || narrow ? "toc-floating" : "toc-docked");
+    theme = localStorage.getItem("lecture-theme");
+    hidden = localStorage.getItem("lecture-contents") === "hidden";
   } catch {}
+  if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+  const narrow = matchMedia("(max-width: 960px)").matches;
+  document.documentElement.classList.add(hidden || narrow ? "toc-floating" : "toc-docked");
 })();
 
 function lectureCanvas(canvas, draw) {
@@ -35,6 +36,7 @@ function lectureCanvas(canvas, draw) {
   };
   new ResizeObserver(redraw).observe(canvas);
   document.addEventListener("themechange", redraw);
+  document.fonts?.addEventListener("loadingdone", redraw);
   return redraw;
 }
 </script>
@@ -411,6 +413,7 @@ button {
 }
 button:hover { background: var(--surface-strong); }
 button.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+button.primary:hover { filter: brightness(1.1); }
 input, select, textarea {
   font: inherit;
   font-size: 15px;
@@ -517,16 +520,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   const label = (el, text) => { el.title = text; el.setAttribute("aria-label", text); };
 
-  if (window.renderMathInElement) {
-    renderMathInElement(document.body, {
-      delimiters: [
-        { left: "$$", right: "$$", display: true },
-        { left: "\\[", right: "\\]", display: true },
-        { left: "\\(", right: "\\)", display: false },
-      ],
-      throwOnError: false,
-    });
-  }
 
   // Theme
   const themes = { auto: "System", light: "Light", dark: "Dark" };
@@ -694,12 +687,24 @@ document.addEventListener("DOMContentLoaded", () => {
   nav.append(top);
   nav.querySelectorAll("li.has-children").forEach((li) => setOpen(li, false));
 
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "\\[", right: "\\]", display: true },
+        { left: "\\(", right: "\\)", display: false },
+      ],
+      throwOnError: false,
+    });
+  }
+
   // Current section: highlight it and unfold it with its ancestors; never fold anything
   let active = null;
   const update = () => {
+    const end = innerHeight + scrollY >= root.scrollHeight - 2;
     let cur = items[0];
     for (const it of items) {
-      if (it.h.getBoundingClientRect().top > 120) break;
+      if (it.h.getBoundingClientRect().top > (end ? innerHeight : 120)) break;
       cur = it;
     }
     if (!cur || cur === active) return;
