@@ -568,6 +568,9 @@ document.addEventListener("DOMContentLoaded", () => {
     changed();
   });
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => theme === "auto" && changed());
+  // Print in light colors: canvases redraw from the light tokens, then restore
+  addEventListener("beforeprint", () => { root.dataset.theme = "light"; changed(); });
+  addEventListener("afterprint", () => { applyTheme(); changed(); });
   applyTheme();
 
   const setSettings = (open) => {
