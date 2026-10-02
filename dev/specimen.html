@@ -1,0 +1,185 @@
+<header>
+<h1>Style specimen</h1>
+<p class="subtitle">Every element the template styles, in one page.</p>
+</header>
+
+<h2>Typography</h2>
+<p>Body text sets the reading rhythm. It carries <em>emphasis</em>, <strong>strong importance</strong>, a newly defined <dfn>term</dfn>, a <a href="#typography">link</a>, inline <code>code()</code>, a key like <kbd>Ctrl</kbd> + <kbd>C</kbd>, <mark>highlighted text</mark>, and sub- and superscripts such as H<sub>2</sub>O and x<sup>2</sup>.</p>
+<p>A second paragraph shows spacing between paragraphs and how a longer line wraps across the measure, which is capped so lines stay comfortable to read on wide screens.</p>
+
+<h3>Lists</h3>
+<ul>
+<li>An unordered item</li>
+<li>Another item with a nested list
+<ul><li>Nested item</li><li>Nested item</li></ul>
+</li>
+</ul>
+<ol>
+<li>First step</li>
+<li>Second step</li>
+<li>Third step</li>
+</ol>
+
+<h3>Quotation and rule</h3>
+<blockquote><p>A quotation stands apart from the surrounding text.</p></blockquote>
+<hr>
+
+<h4>A fourth-level heading</h4>
+<p>Fourth-level headings appear in the contents panel too.</p>
+
+<h2>Math and code</h2>
+<p>Inline math sits in the line: \(e^{i\pi} + 1 = 0\). Display math stands alone:</p>
+$$f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$
+<pre><code>def slope(f, x, h=1e-6):
+    """Approximate the derivative of f at x."""
+    return (f(x + h) - f(x)) / h</code></pre>
+
+<h3>Table</h3>
+<table>
+<thead><tr><th>Function</th><th>Derivative</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>\(x^n\)</td><td>\(n x^{n-1}\)</td><td>Power rule</td></tr>
+<tr><td>\(\sin x\)</td><td>\(\cos x\)</td><td>Periodic</td></tr>
+<tr><td>\(e^x\)</td><td>\(e^x\)</td><td>Its own derivative</td></tr>
+</tbody>
+</table>
+
+<h2>Callouts</h2>
+<aside class="callout definition"><p class="callout-title">Definition 1</p><p>A definition introduces a term precisely.</p></aside>
+<aside class="callout theorem"><p class="callout-title">Theorem 2</p><p>A theorem states a result that has been proved.</p></aside>
+<aside class="callout example"><p class="callout-title">Example</p><p>An example works through a concrete case.</p></aside>
+<aside class="callout insight"><p class="callout-title">Insight</p><p>An insight names the idea worth remembering.</p></aside>
+<aside class="callout warning"><p class="callout-title">Common mistake</p><p>A warning flags a frequent misconception.</p></aside>
+<aside class="callout note"><p class="callout-title">Aside</p><p>A note holds optional detail.</p></aside>
+
+<h2>Checkpoints</h2>
+<section class="checkpoint">
+<p class="checkpoint-title">Checkpoint 1</p>
+<p>What is the derivative of \(x^2\)?</p>
+<details class="hint"><summary>Hint</summary><p>Expand \((x+h)^2\) inside the definition.</p></details>
+<details class="solution"><summary>Solution</summary><p>\(\frac{(x+h)^2 - x^2}{h} = 2x + h \to 2x\).</p></details>
+</section>
+
+<h2>Figures</h2>
+<h3>Static figure</h3>
+<figure>
+<svg viewBox="0 0 560 140" role="img" aria-label="Bars in the five series colors">
+<rect x="20" y="60" width="80" height="70" rx="4" fill="var(--series-1)"/>
+<rect x="125" y="30" width="80" height="100" rx="4" fill="var(--series-2)"/>
+<rect x="230" y="80" width="80" height="50" rx="4" fill="var(--series-3)"/>
+<rect x="335" y="45" width="80" height="85" rx="4" fill="var(--series-4)"/>
+<rect x="440" y="15" width="80" height="115" rx="4" fill="var(--series-5)"/>
+</svg>
+<figcaption>Figure 1. The five series colors, used for data in figures.</figcaption>
+</figure>
+
+<h3>Interactive figure</h3>
+<figure class="interactive">
+<div class="controls">
+<label>Frequency <input type="range" id="freq" min="1" max="6" step="1" value="2"> <output id="freq-out">2</output></label>
+<div class="segmented" role="group" aria-label="Wave">
+<button type="button" aria-pressed="true" data-wave="sin">Sine</button>
+<button type="button" aria-pressed="false" data-wave="square">Square</button>
+</div>
+<button type="button" class="primary" id="play">Play</button>
+<button type="button" id="reset">Reset</button>
+</div>
+<canvas id="wave" width="640" height="200" style="width:100%;height:auto"></canvas>
+<ul class="legend"><li style="--swatch: var(--series-1)">Signal</li><li style="--swatch: var(--series-2)">Sample points</li></ul>
+<dl class="stats">
+<div><dt>Frequency</dt><dd id="s-freq">2 Hz</dd></div>
+<div><dt>Period</dt><dd id="s-period">0.50 s</dd></div>
+<div><dt>Phase</dt><dd id="s-phase">0.00</dd></div>
+</dl>
+<figcaption>Figure 2. Controls, toggle, buttons, legend and stats. The canvas redraws when the theme changes.</figcaption>
+</figure>
+
+<h3>Wide diagram</h3>
+<figure>
+<div class="scroll">
+<svg viewBox="0 0 900 80" width="900" role="img" aria-label="A row of numbered packets">
+<g font-size="13" fill="var(--text)">
+<rect x="10" y="20" width="60" height="40" rx="4" fill="var(--accent-bg)" stroke="var(--accent)"/><text x="40" y="45" text-anchor="middle">0</text>
+<rect x="90" y="20" width="60" height="40" rx="4" fill="var(--accent-bg)" stroke="var(--accent)"/><text x="120" y="45" text-anchor="middle">1</text>
+<rect x="170" y="20" width="60" height="40" rx="4" fill="var(--accent-bg)" stroke="var(--accent)"/><text x="200" y="45" text-anchor="middle">2</text>
+<rect x="250" y="20" width="60" height="40" rx="4" fill="var(--surface-strong)" stroke="var(--border-strong)"/><text x="280" y="45" text-anchor="middle">3</text>
+<rect x="330" y="20" width="60" height="40" rx="4" fill="var(--surface-strong)" stroke="var(--border-strong)"/><text x="360" y="45" text-anchor="middle">4</text>
+<rect x="410" y="20" width="60" height="40" rx="4" fill="var(--surface-strong)" stroke="var(--border-strong)"/><text x="440" y="45" text-anchor="middle">5</text>
+<rect x="490" y="20" width="60" height="40" rx="4" fill="var(--surface-strong)" stroke="var(--border-strong)"/><text x="520" y="45" text-anchor="middle">6</text>
+<rect x="570" y="20" width="60" height="40" rx="4" fill="var(--surface-strong)" stroke="var(--border-strong)"/><text x="600" y="45" text-anchor="middle">7</text>
+<rect x="650" y="20" width="60" height="40" rx="4" fill="var(--surface-strong)" stroke="var(--border-strong)"/><text x="680" y="45" text-anchor="middle">8</text>
+<rect x="730" y="20" width="60" height="40" rx="4" fill="var(--surface-strong)" stroke="var(--border-strong)"/><text x="760" y="45" text-anchor="middle">9</text>
+<rect x="810" y="20" width="60" height="40" rx="4" fill="var(--surface-strong)" stroke="var(--border-strong)"/><text x="840" y="45" text-anchor="middle">10</text>
+</g>
+</svg>
+</div>
+<figcaption>Figure 3. A wide diagram scrolls on narrow screens instead of shrinking its text.</figcaption>
+</figure>
+
+<h2>Form controls</h2>
+<div class="controls">
+<label>Text <input type="text" placeholder="Your answer"></label>
+<label>Choice <select><option>Option A</option><option>Option B</option></select></label>
+<label><input type="checkbox" checked> Checkbox</label>
+<label><input type="radio" name="r" checked> Radio A</label>
+<label><input type="radio" name="r"> Radio B</label>
+</div>
+
+<script>
+(() => {
+  const canvas = document.getElementById("wave");
+  const ctx = canvas.getContext("2d");
+  const freq = document.getElementById("freq");
+  let wave = "sin", phase = 0, playing = false;
+  const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const f = (t) => {
+    const s = Math.sin(2 * Math.PI * (+freq.value * t) + phase);
+    return wave === "sin" ? s : Math.sign(s);
+  };
+  const draw = () => {
+    const w = canvas.width, h = canvas.height, mid = h / 2, amp = h * 0.38;
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = css("--border-strong");
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, mid); ctx.lineTo(w, mid); ctx.stroke();
+    ctx.strokeStyle = css("--series-1");
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let x = 0; x <= w; x++) {
+      const y = mid - amp * f(x / w);
+      x ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+    }
+    ctx.stroke();
+    ctx.fillStyle = css("--series-2");
+    for (let i = 0; i <= 16; i++) {
+      const x = (i / 16) * w;
+      ctx.beginPath(); ctx.arc(x, mid - amp * f(x / w), 4, 0, 2 * Math.PI); ctx.fill();
+    }
+    ctx.fillStyle = css("--text-muted");
+    ctx.font = `${css("--figure-text")} ${css("--font-sans")}`;
+    ctx.fillText("t = 0", 4, h - 8);
+    ctx.fillText("t = 1 s", w - 48, h - 8);
+    document.getElementById("freq-out").textContent = freq.value;
+    document.getElementById("s-freq").textContent = `${freq.value} Hz`;
+    document.getElementById("s-period").textContent = `${(1 / freq.value).toFixed(2)} s`;
+    document.getElementById("s-phase").textContent = (phase % (2 * Math.PI)).toFixed(2);
+  };
+  freq.oninput = draw;
+  document.querySelectorAll("[data-wave]").forEach((b) => {
+    b.onclick = () => {
+      wave = b.dataset.wave;
+      document.querySelectorAll("[data-wave]").forEach((o) => o.setAttribute("aria-pressed", o === b));
+      draw();
+    };
+  });
+  const tick = () => { if (!playing) return; phase += 0.05; draw(); requestAnimationFrame(tick); };
+  document.getElementById("play").onclick = (e) => {
+    playing = !playing;
+    e.target.textContent = playing ? "Pause" : "Play";
+    tick();
+  };
+  document.getElementById("reset").onclick = () => { phase = 0; draw(); };
+  document.addEventListener("themechange", draw);
+  draw();
+})();
+</script>

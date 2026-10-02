@@ -15,3 +15,11 @@ git clone https://github.com/metrovoc/ground-up-lecture ~/.claude/skills/ground-
 ```
 /ground-up-lecture <topic>
 ```
+
+## Development
+
+`dev/specimen.html` exercises every element the template styles. Serve it, rebuilt from `assets/template.html` on each reload:
+
+```sh
+python3 dev/preview.py
+```
