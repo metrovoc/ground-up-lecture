@@ -12,7 +12,9 @@
   try {
     const theme = localStorage.getItem("lecture-theme");
     if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
-    if (localStorage.getItem("lecture-contents") === "hidden") document.documentElement.classList.add("contents-hidden");
+    const hidden = localStorage.getItem("lecture-contents") === "hidden";
+    const narrow = matchMedia("(max-width: 960px)").matches;
+    document.documentElement.classList.add(hidden || narrow ? "toc-floating" : "toc-docked");
   } catch {}
 })();
 
@@ -101,7 +103,10 @@ function lectureCanvas(canvas, draw) {
   --radius: 8px;
   --figure-text: 13px;
   --measure: 72ch;
-  --toc-width: 248px;
+  --toc-width: 15.5rem;
+  --toc-space: 0rem;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 8px 24px rgb(0 0 0 / 0.1);
   color-scheme: light;
 }
 
@@ -172,36 +177,76 @@ body {
 
 /* Layout */
 
-.page {
-  display: grid;
-  grid-template-columns: var(--toc-width) minmax(0, 1fr);
-  gap: 3rem;
-  max-width: calc(var(--toc-width) + var(--measure) + 6rem);
-  margin: 0 auto;
-  padding: 3rem 1.5rem 6rem;
+.page { padding: 3rem 1.5rem 6rem; }
+
+main {
+  width: min(var(--measure), 100% - var(--toc-space));
+  margin-left: max(var(--toc-space), (100% - var(--measure)) / 2);
 }
 
-main { min-width: 0; max-width: var(--measure); }
+.toc-docked { --toc-space: calc(var(--toc-width) + 3rem); }
+
+/* Contents: docked on the left, or floating when hidden or on narrow screens */
 
 .toc {
-  position: sticky;
-  top: 1.5rem;
-  align-self: start;
-  max-height: calc(100vh - 3rem);
+  position: fixed;
+  top: 3.75rem;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 20;
+  width: var(--toc-width);
   overflow-y: auto;
+  overscroll-behavior: contain;
   font-size: 14px;
   line-height: 1.45;
   scrollbar-width: thin;
 }
-.toc ol { list-style: none; margin: 0; padding: 0; }
-.toc ol ol { padding-left: 0.85rem; }
-.toc li { margin: 0.05rem 0; }
+.toc-floating .toc {
+  bottom: auto;
+  max-height: calc(100vh - 5rem);
+  width: min(var(--toc-width) + 2rem, 100vw - 2rem);
+  padding: 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-0.5rem);
+  transition: opacity 0.15s, transform 0.15s, visibility 0.15s;
+}
+.toc-floating .toc.peek { opacity: 1; visibility: visible; transform: none; }
+
+.toc-edge { display: none; position: fixed; inset: 0 auto 0 0; width: 0.75rem; z-index: 19; }
+.toc-floating:not(.toc-narrow) .toc-edge { display: block; }
+
+.toc ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--border); }
+.toc ol ol { margin: 0.1rem 0 0.25rem 0.75rem; }
+.toc li { margin: 0; }
 .toc-row { display: flex; align-items: flex-start; }
-.toc-row::before { content: ""; flex: 0 0 1.4rem; }
-.toc li.has-children > .toc-row::before { display: none; }
+.toc a {
+  position: relative;
+  flex: 1;
+  display: block;
+  padding: 0.28rem 0.5rem 0.28rem 0.75rem;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+.toc a:hover { color: var(--text); }
+.toc a.active { color: var(--accent); font-weight: 500; }
+.toc a.active::before {
+  content: "";
+  position: absolute;
+  left: -1.5px;
+  top: 0.3rem;
+  bottom: 0.3rem;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+}
 .toc-fold {
-  flex: 0 0 1.4rem;
-  height: 1.8rem;
+  flex: 0 0 1.5rem;
+  height: 1.75rem;
   display: grid;
   place-items: center;
   padding: 0;
@@ -213,69 +258,63 @@ main { min-width: 0; max-width: var(--measure); }
 .toc-fold svg { width: 0.85rem; height: 0.85rem; transition: transform 0.15s; }
 .toc-fold[aria-expanded="true"] svg { transform: rotate(90deg); }
 .toc-fold:hover { background: var(--surface); color: var(--text); }
-.toc a {
-  flex: 1;
-  display: block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  color: var(--text-muted);
-  text-decoration: none;
-}
-.toc a:hover { color: var(--text); background: var(--surface); }
-.toc a.active { color: var(--accent); background: var(--accent-bg); font-weight: 500; }
 
-.toolbar {
+/* Floating buttons and settings */
+
+.float-button {
   position: fixed;
-  top: 0.75rem;
-  right: 0.75rem;
-  z-index: 21;
-  display: flex;
-  gap: 0.125rem;
-  padding: 0.2rem;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 4px 12px rgb(0 0 0 / 0.06);
-}
-.icon-button {
+  left: 1rem;
+  z-index: 22;
   display: grid;
   place-items: center;
-  width: 2rem;
-  height: 2rem;
+  width: 2.25rem;
+  height: 2.25rem;
   padding: 0;
-  border: 0;
-  border-radius: 7px;
-  background: none;
   color: var(--text-muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  box-shadow: var(--shadow-sm);
 }
-.icon-button:hover { background: var(--surface-strong); color: var(--text); }
-.icon-button svg { width: 1.15rem; height: 1.15rem; }
-.toolbar svg, .toc-fold svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.float-button:hover { color: var(--text); background: var(--surface); }
+.contents-button { top: 1rem; }
+.settings-button { bottom: 1rem; }
+.float-button[aria-expanded="true"] { color: var(--accent); }
 
-@media (min-width: 901px) {
-  .contents-hidden .toc { display: none; }
-  .contents-hidden .page { grid-template-columns: minmax(0, 1fr); max-width: calc(var(--measure) + 3rem); }
+.settings-panel {
+  position: fixed;
+  left: 1rem;
+  bottom: 3.75rem;
+  z-index: 22;
+  width: 15rem;
+  padding: 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
 }
+.settings-label { margin: 0 0 0.5rem; font-size: 12px; font-weight: 500; color: var(--text-muted); }
+.theme-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.25rem; padding: 0.2rem; background: var(--surface); border-radius: 8px; }
+.theme-options button {
+  display: grid;
+  justify-items: center;
+  gap: 0.2rem;
+  padding: 0.4rem 0.25rem;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: none;
+  border: 0;
+  border-radius: 6px;
+}
+.theme-options button:hover { color: var(--text); background: none; }
+.theme-options button[aria-checked="true"] { color: var(--text); background: var(--bg); box-shadow: var(--shadow-sm); }
+.float-button svg, .theme-options svg, .toc-fold svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.float-button svg { width: 1.15rem; height: 1.15rem; }
+.theme-options svg { width: 1.05rem; height: 1.05rem; }
 
-@media (max-width: 900px) {
-  .page { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 1.5rem 1rem 5rem; }
-  .toc {
-    position: fixed;
-    inset: 0 0 0 auto;
-    align-self: stretch;
-    z-index: 20;
-    width: min(320px, 85vw);
-    max-height: none;
-    padding: 1.25rem 0.75rem 5rem;
-    background: var(--bg);
-    border-left: 1px solid var(--border);
-    box-shadow: -8px 0 24px rgb(0 0 0 / 0.08);
-    transform: translateX(100%);
-    visibility: hidden;
-    transition: transform 0.2s, visibility 0.2s;
-  }
-  .toc.open { transform: none; visibility: visible; }
-  .toolbar { top: auto; bottom: 1rem; right: 1rem; }
+@media (max-width: 960px) {
+  .page { padding: 4.25rem 1rem 5rem; }
+  main { width: auto; margin: 0; }
 }
 
 /* Typography */
@@ -435,7 +474,8 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
   :root { --bg: #fff; --text: #000; }
   body { font-size: 11pt; }
   .page { display: block; padding: 0; max-width: none; }
-  .toc, .toolbar, button, input, select { display: none; }
+  .toc, .float-button, .settings-panel, button, input, select { display: none; }
+  main { width: auto; margin: 0; }
   h2 { break-before: page; border-top: 0; }
   .callout, .checkpoint, figure, pre { break-inside: avoid; }
 }
@@ -468,6 +508,7 @@ document.addEventListener("DOMContentLoaded", () => {
     light: svg('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>'),
     dark: svg('<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>'),
     chevron: svg('<path d="m9 18 6-6-6-6"/>'),
+    settings: svg('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>'),
   };
   const label = (el, text) => { el.title = text; el.setAttribute("aria-label", text); };
 
@@ -482,54 +523,112 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Toolbar
-  const toolbar = document.createElement("div");
-  toolbar.className = "toolbar";
-  toolbar.innerHTML =
-    `<button type="button" class="icon-button" aria-controls="toc">${icons.contents}</button>` +
-    `<button type="button" class="icon-button"></button>`;
-  document.body.append(toolbar);
-  const [contentsBtn, themeBtn] = toolbar.querySelectorAll("button");
-
   // Theme
-  const themes = ["auto", "light", "dark"];
-  const themeNames = { auto: "system", light: "light", dark: "dark" };
-  let theme = themes.includes(store.get("lecture-theme")) ? store.get("lecture-theme") : "auto";
+  const themes = { auto: "System", light: "Light", dark: "Dark" };
+  let theme = store.get("lecture-theme") in themes ? store.get("lecture-theme") : "auto";
   const changed = () => document.dispatchEvent(new Event("themechange"));
+
+  // Floating controls
+  const contentsBtn = document.createElement("button");
+  contentsBtn.type = "button";
+  contentsBtn.className = "float-button contents-button";
+  contentsBtn.setAttribute("aria-controls", "toc");
+  contentsBtn.innerHTML = icons.contents;
+  const settingsBtn = document.createElement("button");
+  settingsBtn.type = "button";
+  settingsBtn.className = "float-button settings-button";
+  settingsBtn.setAttribute("aria-controls", "settings");
+  settingsBtn.setAttribute("aria-expanded", "false");
+  settingsBtn.innerHTML = icons.settings;
+  label(settingsBtn, "Settings");
+  const settings = document.createElement("div");
+  settings.className = "settings-panel";
+  settings.id = "settings";
+  settings.hidden = true;
+  settings.innerHTML =
+    '<p class="settings-label" id="theme-label">Theme</p>' +
+    '<div class="theme-options" role="radiogroup" aria-labelledby="theme-label">' +
+    Object.entries(themes).map(([key, name]) =>
+      `<button type="button" role="radio" data-theme-option="${key}">${icons[key]}${name}</button>`).join("") +
+    "</div>";
+  const edge = document.createElement("div");
+  edge.className = "toc-edge";
+  document.body.append(contentsBtn, settingsBtn, settings, edge);
+
   const applyTheme = () => {
     if (theme === "auto") delete root.dataset.theme;
     else root.dataset.theme = theme;
-    themeBtn.innerHTML = icons[theme];
-    label(themeBtn, `Theme: ${themeNames[theme]}`);
+    settings.querySelectorAll("[data-theme-option]").forEach((b) =>
+      b.setAttribute("aria-checked", b.dataset.themeOption === theme));
   };
-  themeBtn.onclick = () => {
-    theme = themes[(themes.indexOf(theme) + 1) % themes.length];
+  settings.addEventListener("click", (e) => {
+    const option = e.target.closest("[data-theme-option]");
+    if (!option || option.dataset.themeOption === theme) return;
+    theme = option.dataset.themeOption;
     store.set("lecture-theme", theme);
     applyTheme();
     changed();
-  };
+  });
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => theme === "auto" && changed());
   applyTheme();
 
-  // Contents visibility: a sidebar on wide screens, a drawer on narrow ones
-  const narrow = matchMedia("(max-width: 900px)");
-  const applyContents = () => {
-    const open = narrow.matches ? nav.classList.contains("open") : !root.classList.contains("contents-hidden");
-    contentsBtn.setAttribute("aria-expanded", open);
-    label(contentsBtn, open ? "Hide contents" : "Show contents");
+  const setSettings = (open) => {
+    settings.hidden = !open;
+    settingsBtn.setAttribute("aria-expanded", open);
   };
-  const closeDrawer = () => { nav.classList.remove("open"); applyContents(); };
-  contentsBtn.onclick = () => {
-    if (narrow.matches) nav.classList.toggle("open");
-    else {
-      const hidden = root.classList.toggle("contents-hidden");
-      store.set("lecture-contents", hidden ? "hidden" : "shown");
-    }
+  settingsBtn.onclick = () => setSettings(settings.hidden);
+
+  // Contents visibility: docked on wide screens unless hidden; otherwise a floating panel
+  const narrow = matchMedia("(max-width: 960px)");
+  let hidden = store.get("lecture-contents") === "hidden";
+  let peekTimer;
+  let suppressHover = false;
+  const floating = () => hidden || narrow.matches;
+  const applyContents = () => {
+    root.classList.toggle("toc-floating", floating());
+    root.classList.toggle("toc-docked", !floating());
+    root.classList.toggle("toc-narrow", narrow.matches);
+    const shown = !floating() || nav.classList.contains("peek");
+    contentsBtn.setAttribute("aria-expanded", shown);
+    label(contentsBtn, narrow.matches
+      ? (shown ? "Close contents" : "Open contents")
+      : (hidden ? "Pin contents" : "Hide contents"));
+  };
+  const peek = (on) => {
+    clearTimeout(peekTimer);
+    nav.classList.toggle("peek", on);
     applyContents();
   };
-  nav.addEventListener("click", (e) => narrow.matches && e.target.closest("a") && closeDrawer());
-  addEventListener("keydown", (e) => e.key === "Escape" && closeDrawer());
-  narrow.addEventListener("change", closeDrawer);
+  for (const el of [contentsBtn, edge, nav]) {
+    el.addEventListener("pointerenter", (e) => {
+      if (e.pointerType !== "mouse" || !hidden || narrow.matches || suppressHover) return;
+      peek(true);
+    });
+    el.addEventListener("pointerleave", (e) => {
+      if (el === contentsBtn) suppressHover = false;
+      if (e.pointerType !== "mouse" || !hidden || narrow.matches) return;
+      clearTimeout(peekTimer);
+      peekTimer = setTimeout(() => peek(false), 250);
+    });
+  }
+  contentsBtn.onclick = () => {
+    if (narrow.matches) return peek(!nav.classList.contains("peek"));
+    hidden = !hidden;
+    store.set("lecture-contents", hidden ? "hidden" : "shown");
+    suppressHover = hidden && contentsBtn.matches(":hover");
+    peek(false);
+  };
+  nav.addEventListener("click", (e) => floating() && e.target.closest("a") && peek(false));
+  document.addEventListener("click", (e) => {
+    if (!settings.hidden && !settings.contains(e.target) && !settingsBtn.contains(e.target)) setSettings(false);
+    if (narrow.matches && nav.classList.contains("peek") && !nav.contains(e.target) && !contentsBtn.contains(e.target)) peek(false);
+  });
+  addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    setSettings(false);
+    if (floating()) peek(false);
+  });
+  narrow.addEventListener("change", () => peek(false));
   applyContents();
 
   // Contents, generated from every h2–h4 in the lecture
@@ -552,7 +651,7 @@ document.addEventListener("DOMContentLoaded", () => {
     label(b, "Toggle subsections");
     b.onclick = () => setOpen(li, b.getAttribute("aria-expanded") !== "true");
     li.classList.add("has-children");
-    li.firstChild.prepend(b);
+    li.firstChild.append(b);
   };
 
   const top = document.createElement("ol");
