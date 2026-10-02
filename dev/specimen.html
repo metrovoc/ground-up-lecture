@@ -84,7 +84,7 @@ $$f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$
 <button type="button" class="primary" id="play">Play</button>
 <button type="button" id="reset">Reset</button>
 </div>
-<canvas id="wave" width="640" height="200" style="width:100%;height:auto"></canvas>
+<canvas id="wave" style="height: 220px"></canvas>
 <ul class="legend"><li style="--swatch: var(--series-1)">Signal</li><li style="--swatch: var(--series-2)">Sample points</li></ul>
 <dl class="stats">
 <div><dt>Frequency</dt><dd id="s-freq">2 Hz</dd></div>
@@ -127,8 +127,6 @@ $$f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$
 
 <script>
 (() => {
-  const canvas = document.getElementById("wave");
-  const ctx = canvas.getContext("2d");
   const freq = document.getElementById("freq");
   let wave = "sin", phase = 0, playing = false;
   const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -136,14 +134,13 @@ $$f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$
     const s = Math.sin(2 * Math.PI * (+freq.value * t) + phase);
     return wave === "sin" ? s : Math.sign(s);
   };
-  const draw = () => {
-    const w = canvas.width, h = canvas.height, mid = h / 2, amp = h * 0.38;
-    ctx.clearRect(0, 0, w, h);
+  const redraw = lectureCanvas(document.getElementById("wave"), (ctx, w, h) => {
+    const mid = h / 2, amp = h * 0.36;
     ctx.strokeStyle = css("--border-strong");
     ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(0, mid); ctx.lineTo(w, mid); ctx.stroke();
     ctx.strokeStyle = css("--series-1");
-    ctx.lineWidth = 2.5;
+    ctx.lineWidth = 2;
     ctx.beginPath();
     for (let x = 0; x <= w; x++) {
       const y = mid - amp * f(x / w);
@@ -153,33 +150,38 @@ $$f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$
     ctx.fillStyle = css("--series-2");
     for (let i = 0; i <= 16; i++) {
       const x = (i / 16) * w;
-      ctx.beginPath(); ctx.arc(x, mid - amp * f(x / w), 4, 0, 2 * Math.PI); ctx.fill();
+      ctx.beginPath(); ctx.arc(x, mid - amp * f(x / w), 3.5, 0, 2 * Math.PI); ctx.fill();
     }
     ctx.fillStyle = css("--text-muted");
     ctx.font = `${css("--figure-text")} ${css("--font-sans")}`;
-    ctx.fillText("t = 0", 4, h - 8);
-    ctx.fillText("t = 1 s", w - 48, h - 8);
+    ctx.textBaseline = "bottom";
+    ctx.fillText("t = 0", 2, h - 2);
+    ctx.textAlign = "right";
+    ctx.fillText("t = 1 s", w - 2, h - 2);
+    ctx.textAlign = "left";
+  });
+  const update = () => {
     document.getElementById("freq-out").textContent = freq.value;
     document.getElementById("s-freq").textContent = `${freq.value} Hz`;
     document.getElementById("s-period").textContent = `${(1 / freq.value).toFixed(2)} s`;
     document.getElementById("s-phase").textContent = (phase % (2 * Math.PI)).toFixed(2);
+    redraw();
   };
-  freq.oninput = draw;
+  freq.oninput = update;
   document.querySelectorAll("[data-wave]").forEach((b) => {
     b.onclick = () => {
       wave = b.dataset.wave;
       document.querySelectorAll("[data-wave]").forEach((o) => o.setAttribute("aria-pressed", o === b));
-      draw();
+      update();
     };
   });
-  const tick = () => { if (!playing) return; phase += 0.05; draw(); requestAnimationFrame(tick); };
+  const tick = () => { if (!playing) return; phase += 0.05; update(); requestAnimationFrame(tick); };
   document.getElementById("play").onclick = (e) => {
     playing = !playing;
     e.target.textContent = playing ? "Pause" : "Play";
     tick();
   };
-  document.getElementById("reset").onclick = () => { phase = 0; draw(); };
-  document.addEventListener("themechange", draw);
-  draw();
+  document.getElementById("reset").onclick = () => { phase = 0; update(); };
+  update();
 })();
 </script>
