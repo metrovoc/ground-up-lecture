@@ -48,17 +48,17 @@ function lectureCanvas(canvas, draw) {
  * contents panel automatically (ids are generated when missing), so do not
  * write a table of contents.
  *
- * Callouts:    <aside class="callout definition|theorem|example|insight|warning|note">
+ * Callouts:    <aside class="callout [definition|theorem|example|insight|warning|note]">
  *                <p class="callout-title">Definition 1.2</p> …
  *              </aside>
  * Checkpoints: <section class="checkpoint">
  *                <p class="checkpoint-title">Checkpoint 1.2</p> …
- *                <details class="hint"><summary>Hint</summary> …</details>
+ *                [<details class="hint"><summary>Hint</summary> …</details>]
  *                <details class="solution"><summary>Solution</summary> …</details>
  *              </section>
  * Math:        KaTeX renders \( … \), \[ … \] and $$ … $$.
  * Figures:     <figure> … <figcaption>…</figcaption></figure>
- *              Interactive figures: <figure class="interactive"> with native controls.
+ *              Interactive figures: <figure class="interactive">.
  * Figure UI:   <div class="controls"><label>Rate <input type="range"> <output>2</output></label> …</div>
  *              <div class="segmented" role="group"><button aria-pressed="true">A</button><button aria-pressed="false">B</button></div>
  *              <dl class="stats"><div><dt>Delivered</dt><dd>12</dd></div> …</dl>
@@ -331,7 +331,7 @@ h1 { font-size: 2.4rem; letter-spacing: -0.025em; font-weight: 700; margin-top: 
 h2 { font-size: 1.7rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
 h3 { font-size: 1.3rem; }
 h4 { font-size: 1.05rem; }
-h1 + p, .subtitle { color: var(--text-muted); font-size: 1.15rem; }
+h1 + p { color: var(--text-muted); font-size: 1.15rem; }
 
 p, ul, ol, table, figure, pre, blockquote { margin: 0 0 1.1rem; }
 ul, ol { padding-left: 1.4rem; }
@@ -495,7 +495,7 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
 <main>
 <header>
 <h1>Lecture title</h1>
-<p class="subtitle">One-line subtitle</p>
+<p>Subtitle</p>
 </header>
 
 </main>
