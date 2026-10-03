@@ -703,6 +703,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Current section: highlight it and unfold it with its ancestors; never fold anything
   let active = null;
+  let destination = null;
+  let settleTimer;
   const update = () => {
     const end = innerHeight + scrollY >= root.scrollHeight - 2;
     let cur = items[0];
@@ -710,6 +712,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (it.h.getBoundingClientRect().top > (end ? innerHeight : 120)) break;
       cur = it;
     }
+    cur = destination || cur;
     if (!cur || cur === active) return;
     active?.a.classList.remove("active");
     active?.a.removeAttribute("aria-current");
@@ -721,8 +724,28 @@ document.addEventListener("DOMContentLoaded", () => {
     if (y < nav.scrollTop || y > nav.scrollTop + nav.clientHeight - 40)
       nav.scrollTop = y - nav.clientHeight / 3;
   };
+  const settle = () => {
+    clearTimeout(settleTimer);
+    destination = null;
+    update();
+  };
+  // Keep the chosen section active while native anchor scrolling passes other headings.
+  nav.addEventListener("click", (e) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const a = e.target.closest("a");
+    const item = items.find((it) => it.a === a);
+    if (!item) return;
+    destination = item;
+    update();
+    clearTimeout(settleTimer);
+    settleTimer = setTimeout(settle, 150);
+  });
+  addEventListener("scrollend", settle);
   let queued = false;
   addEventListener("scroll", () => {
+    // Also settle interrupted, zero-distance, and older-browser navigation.
+    clearTimeout(settleTimer);
+    settleTimer = setTimeout(settle, 150);
     if (queued) return;
     queued = true;
     requestAnimationFrame(() => { queued = false; update(); });
