@@ -38,9 +38,7 @@
  * Math:        KaTeX renders \( … \), \[ … \] and $$ … $$.
  * Figures:     <figure> … <figcaption>…</figcaption></figure>
  *              Interactive figures: <figure class="interactive">.
- *              Draw each figure at one fixed size; narrow screens shrink it. An inline
- *              SVG with a viewBox does this, stays sharp and takes its colors from the
- *              tokens without extra code.
+ *              Draw each figure at one fixed size; narrow screens shrink it.
  * Figure UI:   <div class="controls"><label>Rate <input type="range"> <output>2</output></label> …</div>
  *              <div class="segmented" role="group"><button aria-pressed="true">A</button><button aria-pressed="false">B</button></div>
  *              <dl class="stats"><div><dt>Delivered</dt><dd>12</dd></div> …</dl>
@@ -48,8 +46,7 @@
  *              <div class="scroll">…</div> lets a wide diagram scroll instead of shrinking.
  *              Figure text renders at var(--figure-text) or larger; read it in canvas code.
  * Theme:       light/dark follows the system or the reader's toggle. Use the tokens
- *              below in custom CSS and figures; redraw canvases on the document's
- *              "themechange" event.
+ *              below in custom CSS and figures; the document fires "themechange".
  */
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
