@@ -18,44 +18,6 @@
   const narrow = matchMedia("(max-width: 960px)").matches;
   document.documentElement.classList.add(hidden || narrow ? "toc-floating" : "toc-docked");
 })();
-
-function lectureCanvas(canvas, draw) {
-  const ctx = canvas.getContext("2d");
-  // Text that would cross the canvas edge is nudged back inside instead of being cut off
-  for (const name of ["fillText", "strokeText"]) {
-    const native = ctx[name];
-    ctx[name] = function (text, x, y, ...rest) {
-      const t = this.getTransform();
-      if (!t.b && !t.c) {
-        const m = this.measureText(text), pad = window.devicePixelRatio || 1;
-        const shift = (a, b, size) => {
-          const lo = Math.min(a, b) - pad, hi = Math.max(a, b) + pad;
-          return hi <= 0 || lo >= size ? 0 : lo < 0 ? -lo : hi > size ? Math.max(size - hi, -lo) : 0;
-        };
-        x += shift(t.a * (x - m.actualBoundingBoxLeft) + t.e, t.a * (x + m.actualBoundingBoxRight) + t.e, canvas.width) / t.a;
-        y += shift(t.d * (y - m.actualBoundingBoxAscent) + t.f, t.d * (y + m.actualBoundingBoxDescent) + t.f, canvas.height) / t.d;
-      }
-      return native.call(this, text, x, y, ...rest);
-    };
-  }
-  const redraw = () => {
-    const { width, height } = canvas.getBoundingClientRect();
-    if (!width || !height) return;
-    const ratio = window.devicePixelRatio || 1;
-    const w = Math.round(width * ratio), h = Math.round(height * ratio);
-    if (canvas.width !== w || canvas.height !== h) {
-      canvas.width = w;
-      canvas.height = h;
-    }
-    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-    ctx.clearRect(0, 0, width, height);
-    draw(ctx, width, height);
-  };
-  new ResizeObserver(redraw).observe(canvas);
-  document.addEventListener("themechange", redraw);
-  document.fonts?.addEventListener("loadingdone", redraw);
-  return redraw;
-}
 </script>
 <style>
 /*
@@ -76,19 +38,18 @@ function lectureCanvas(canvas, draw) {
  * Math:        KaTeX renders \( … \), \[ … \] and $$ … $$.
  * Figures:     <figure> … <figcaption>…</figcaption></figure>
  *              Interactive figures: <figure class="interactive">.
+ *              Draw each figure at one fixed size; narrow screens shrink it. An inline
+ *              SVG with a viewBox does this, stays sharp and takes its colors from the
+ *              tokens without extra code.
  * Figure UI:   <div class="controls"><label>Rate <input type="range"> <output>2</output></label> …</div>
  *              <div class="segmented" role="group"><button aria-pressed="true">A</button><button aria-pressed="false">B</button></div>
  *              <dl class="stats"><div><dt>Delivered</dt><dd>12</dd></div> …</dl>
  *              <ul class="legend"><li style="--swatch: var(--series-1)">Sent</li> …</ul>
  *              <div class="scroll">…</div> lets a wide diagram scroll instead of shrinking.
  *              Figure text renders at var(--figure-text) or larger; read it in canvas code.
- * Canvas:      const redraw = lectureCanvas(canvasEl, (ctx, width, height) => { … });
- *              draws in CSS pixels, stays sharp on high-density screens, keeps text
- *              inside the canvas, and redraws on resize and theme change; call
- *              redraw() after state changes.
- *              Give the canvas a CSS height or width/height attributes for its ratio.
  * Theme:       light/dark follows the system or the reader's toggle. Use the tokens
- *              below in custom CSS and figures; the document fires "themechange".
+ *              below in custom CSS and figures; redraw canvases on the document's
+ *              "themechange" event.
  */
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");

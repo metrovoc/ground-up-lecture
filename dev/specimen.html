@@ -85,14 +85,14 @@ $$f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$
 <button type="button" class="primary" id="play">Play</button>
 <button type="button" id="reset">Reset</button>
 </div>
-<canvas id="wave" style="height: 220px"></canvas>
+<svg id="wave" viewBox="0 0 720 220" role="img" aria-label="A wave with sample points"></svg>
 <ul class="legend"><li style="--swatch: var(--series-1)">Signal</li><li style="--swatch: var(--series-2)">Sample points</li></ul>
 <dl class="stats">
 <div><dt>Frequency</dt><dd id="s-freq">2 Hz</dd></div>
 <div><dt>Period</dt><dd id="s-period">0.50 s</dd></div>
 <div><dt>Phase</dt><dd id="s-phase">0.00</dd></div>
 </dl>
-<figcaption>Figure 2. Controls, toggle, buttons, legend and stats. The canvas redraws when the theme changes.</figcaption>
+<figcaption>Figure 2. Controls, toggle, buttons, legend and stats around an SVG plot, which follows the theme on its own.</figcaption>
 </figure>
 
 <h3>Wide diagram</h3>
@@ -130,37 +130,21 @@ $$f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$
 (() => {
   const freq = document.getElementById("freq");
   let wave = "sin", phase = 0, playing = false;
-  const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const f = (t) => {
     const s = Math.sin(2 * Math.PI * (+freq.value * t) + phase);
     return wave === "sin" ? s : Math.sign(s);
   };
-  const redraw = lectureCanvas(document.getElementById("wave"), (ctx, w, h) => {
-    const mid = h / 2, amp = h * 0.36;
-    ctx.strokeStyle = css("--border-strong");
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(0, mid); ctx.lineTo(w, mid); ctx.stroke();
-    ctx.strokeStyle = css("--series-1");
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    for (let x = 0; x <= w; x++) {
-      const y = mid - amp * f(x / w);
-      x ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
-    }
-    ctx.stroke();
-    ctx.fillStyle = css("--series-2");
-    for (let i = 0; i <= 16; i++) {
-      const x = (i / 16) * w;
-      ctx.beginPath(); ctx.arc(x, mid - amp * f(x / w), 3.5, 0, 2 * Math.PI); ctx.fill();
-    }
-    ctx.fillStyle = css("--text-muted");
-    ctx.font = `${css("--figure-text")} ${css("--font-sans")}`;
-    ctx.textBaseline = "bottom";
-    ctx.fillText("t = 0", 2, h - 2);
-    ctx.textAlign = "right";
-    ctx.fillText("t = 1 s", w - 2, h - 2);
-    ctx.textAlign = "left";
-  });
+  const svg = document.getElementById("wave"), w = 720, h = 220, mid = h / 2, amp = h * 0.36;
+  const y = (x) => (mid - amp * f(x / w)).toFixed(1);
+  const redraw = () => {
+    let path = "", dots = "";
+    for (let x = 0; x <= w; x += 2) path += `${x ? "L" : "M"}${x} ${y(x)}`;
+    for (let i = 0; i <= 16; i++) dots += `<circle cx="${(i / 16) * w}" cy="${y((i / 16) * w)}" r="3.5"/>`;
+    svg.innerHTML = `<line x1="0" y1="${mid}" x2="${w}" y2="${mid}" stroke="var(--border-strong)"/>
+<path d="${path}" fill="none" stroke="var(--series-1)" stroke-width="2"/>
+<g fill="var(--series-2)">${dots}</g>
+<g font-size="13" fill="var(--text-muted)"><text x="2" y="${h - 4}">t = 0</text><text x="${w - 2}" y="${h - 4}" text-anchor="end">t = 1 s</text></g>`;
+  };
   const update = () => {
     document.getElementById("freq-out").textContent = freq.value;
     document.getElementById("s-freq").textContent = `${freq.value} Hz`;
