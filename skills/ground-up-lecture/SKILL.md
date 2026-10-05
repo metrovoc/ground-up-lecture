@@ -9,6 +9,6 @@ Given a topic, deliver a comprehensive lecture on it, from the fundamentals to t
 - Keep it engaging and effortless to follow.
 - No compromises on depth, breadth, or accessibility.
 - Integrate exercises as checkpoints, letting readers attempt each one, interactively where that helps, before seeing its solution.
-- Exploit the browser: figures, plots, animations, and interactive simulations wherever they make an idea clearer than prose can.
+- Exploit the browser boldly: imagine the most illuminating form each idea could take, then build it, however ambitious.
 
 Deliver one standalone HTML file built from [template.html](assets/template.html); it may load external resources.
