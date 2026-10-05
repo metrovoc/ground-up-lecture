@@ -1,4 +1,4 @@
-"""Serve the style specimen, rebuilt from the skill template on every request."""
+"""Serve the style specimen, rebuilt from the skill's blank page on every request."""
 
 import http.server
 import pathlib
@@ -10,9 +10,9 @@ PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
 
 class Handler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
-        template = (ROOT / "skills/ground-up-lecture/assets/template.html").read_text()
+        blank = (ROOT / "skills/ground-up-lecture/assets/blank.html").read_text()
         body = (ROOT / "dev/specimen.html").read_text()
-        head, rest = template.rsplit("<main>", 1)
+        head, rest = blank.rsplit("<main>", 1)
         page = head + "<main>\n" + body + "\n</main>" + rest.rsplit("</main>", 1)[1]
         data = page.replace("<title>Lecture title</title>", "<title>Style specimen</title>").encode()
         self.send_response(200)

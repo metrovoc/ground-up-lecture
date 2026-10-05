@@ -24,26 +24,11 @@
  * ground-up-lecture visual identity and page shell.
  *
  * Write the lecture into <main> after the header. Headings h2–h4 become the
- * contents panel automatically (ids are generated when missing), so do not
- * write a table of contents.
+ * contents panel automatically (ids are generated when missing).
  *
- * Callouts:    <aside class="callout [definition|theorem|example|insight|warning|note]">
- *                <p class="callout-title">Definition 1.2</p> …
- *              </aside>
- * Checkpoints: <section class="checkpoint">
- *                <p class="checkpoint-title">Checkpoint 1.2</p> …
- *                [<details><summary>Hint</summary> …</details>]
- *                <details><summary>Solution</summary> …</details>
- *              </section>
  * Math:        KaTeX renders \( … \), \[ … \] and $$ … $$.
- * Figures:     <figure> … <figcaption>…</figcaption></figure>
- *              Interactive figures: <figure class="interactive">.
- *              Draw each figure at one fixed size, with text at var(--figure-text) or
+ * Figures:     Draw each figure at one fixed size, with text at var(--figure-text) or
  *              larger; narrow screens shrink it.
- * Figure UI:   <div class="controls"><label>Rate <input type="range"> <output>2</output></label> …</div>
- *              <div class="segmented" role="group"><button aria-pressed="true">A</button><button aria-pressed="false">B</button></div>
- *              <dl class="stats"><div><dt>Delivered</dt><dd>12</dd></div> …</dl>
- *              <ul class="legend"><li style="--swatch: var(--series-1)">Sent</li> …</ul>
  * Theme:       light/dark follows the system or the reader's toggle. Use the tokens
  *              below in custom CSS and figures; the document fires "themechange".
  */
