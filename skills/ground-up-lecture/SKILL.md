@@ -8,7 +8,7 @@ Given a topic, deliver a comprehensive lecture on it, from the fundamentals to t
 - Make it fully self-contained: teach everything within the lecture itself, never deferring to external videos, books, or other resources.
 - Keep it engaging and effortless to follow.
 - No compromises on depth, breadth, or accessibility.
-- Integrate exercises as checkpoints, letting readers attempt each one, interactively where that helps, before seeing its solution.
-- Exploit the browser boldly: imagine the most illuminating form each idea could take, then build it, however ambitious.
+- Integrate exercises as checkpoints, letting readers attempt each one before seeing its solution.
+- Exploit the browser boldly: imagine the most illuminating form each idea and exercise could take, then build it, however ambitious.
 
 Deliver one standalone HTML file built from [template.html](assets/template.html); it may load external resources.
