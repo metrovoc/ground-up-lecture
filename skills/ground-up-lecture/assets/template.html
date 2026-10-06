@@ -56,8 +56,6 @@
   --measure: 72ch;
   --toc-width: 15.5rem;
   --toc-space: 0rem;
-  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
-  --shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 8px 24px rgb(0 0 0 / 0.1);
   color-scheme: light;
 }
 
@@ -162,7 +160,7 @@ main {
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 12px;
-  box-shadow: var(--shadow);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 8px 24px rgb(0 0 0 / 0.1);
   opacity: 0;
   visibility: hidden;
   transform: translateX(-0.5rem);
@@ -231,7 +229,7 @@ main {
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 9px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
 }
 .float-button:hover { color: var(--text); background: var(--surface); }
 .contents-button { top: 1rem; }
@@ -248,7 +246,7 @@ main {
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 12px;
-  box-shadow: var(--shadow);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 8px 24px rgb(0 0 0 / 0.1);
 }
 .settings-label { margin: 0 0 0.5rem; font-size: 12px; font-weight: 500; color: var(--text-muted); }
 .theme-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.25rem; padding: 0.2rem; background: var(--surface); border-radius: 8px; }
@@ -264,7 +262,7 @@ main {
   border-radius: 6px;
 }
 .theme-options button:hover { color: var(--text); background: none; }
-.theme-options button[aria-checked="true"] { color: var(--text); background: var(--bg); box-shadow: var(--shadow-sm); }
+.theme-options button[aria-checked="true"] { color: var(--text); background: var(--bg); box-shadow: 0 1px 2px rgb(0 0 0 / 0.06); }
 .float-button svg, .theme-options svg, .toc-fold svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .float-button svg { width: 1.15rem; height: 1.15rem; }
 .theme-options svg { width: 1.05rem; height: 1.05rem; }
