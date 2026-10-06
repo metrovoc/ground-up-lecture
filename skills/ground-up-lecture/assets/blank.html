@@ -293,7 +293,7 @@ h3 { font-size: 1.3rem; }
 h4 { font-size: 1.05rem; }
 h1 + p, .subtitle { color: var(--text-muted); font-size: 1.15rem; }
 
-p, ul, ol, table, figure, pre, blockquote { margin: 0 0 1.1rem; }
+p, ul, ol, table, figure, pre, blockquote, details { margin: 0 0 1.1rem; }
 ul, ol { padding-left: 1.4rem; }
 li { margin: 0.25rem 0; }
 strong { font-weight: 600; }
@@ -403,18 +403,9 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
 .callout.warning { --c: var(--warning); --c-bg: var(--warning-bg); }
 .callout.note { --c: var(--text-muted); --c-bg: transparent; border: 1px solid var(--border); }
 
-/* Checkpoints */
+/* Reveals */
 
-.checkpoint {
-  margin: 2rem 0;
-  padding: 1rem 1.15rem;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius);
-}
-.checkpoint > :last-child { margin-bottom: 0; }
-.checkpoint-title { margin: 0 0 0.4rem; font-size: 14px; font-weight: 600; color: var(--accent); }
-.checkpoint details { margin: 0.6rem 0 0; border-top: 1px solid var(--border); padding-top: 0.6rem; }
-.checkpoint summary {
+summary {
   cursor: pointer;
   width: fit-content;
   font-size: 14px;
@@ -422,11 +413,11 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
   color: var(--accent);
   list-style: none;
 }
-.checkpoint summary::-webkit-details-marker { display: none; }
-.checkpoint summary::before { content: "+ "; }
-.checkpoint details[open] > summary::before { content: "− "; }
-.checkpoint details[open] > summary { margin-bottom: 0.5rem; }
-.checkpoint details > :last-child { margin-bottom: 0; }
+summary::-webkit-details-marker { display: none; }
+summary::before { content: "+ "; }
+details[open] > summary::before { content: "− "; }
+details[open] > summary { margin-bottom: 0.5rem; }
+details > :last-child { margin-bottom: 0; }
 
 /* Motion and print */
 
@@ -442,7 +433,7 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
   .toc, .float-button, .settings-panel, button, input, select { display: none; }
   main { width: auto; margin: 0; }
   h2 { break-before: page; border-top: 0; }
-  .callout, .checkpoint, figure, pre { break-inside: avoid; }
+  .callout, figure, pre { break-inside: avoid; }
 }
 </style>
 </head>
@@ -595,7 +586,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "") || "section";
   const used = new Set([...document.querySelectorAll("[id]")].map((e) => e.id));
   const heads = [...main.querySelectorAll("h2, h3, h4")]
-    .filter((h) => !h.closest("figure, aside, .checkpoint, details"));
+    .filter((h) => !h.closest("figure, aside, details"));
 
   const setOpen = (li, open) => {
     li.querySelector(":scope > ol").hidden = !open;
