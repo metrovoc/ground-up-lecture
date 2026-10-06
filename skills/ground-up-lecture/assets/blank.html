@@ -21,7 +21,9 @@
 </script>
 <style>
 /*
- * ground-up-lecture visual identity and page shell.
+ * ground-up-lecture visual identity and page shell, only a reference for the
+ * look. Design every part of the lecture yourself, reusing a style below only
+ * where it fits your design.
  *
  * Write the lecture into <main> after the header. Headings h2–h4 become the
  * contents panel automatically (ids are generated when missing).
@@ -29,8 +31,9 @@
  * Math:        KaTeX renders \( … \), \[ … \] and $$ … $$.
  * Figures:     Draw each figure at one fixed size, with text at var(--figure-text) or
  *              larger; narrow screens shrink it.
- * Theme:       light/dark follows the system or the reader's toggle. Use the tokens
- *              below in custom CSS and figures; the document fires "themechange".
+ * Theme:       light/dark follows the system or the reader's toggle by swapping the
+ *              color variables below, so anything colored with them follows along;
+ *              give new colors a dark value as well. The document fires "themechange".
  */
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
