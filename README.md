@@ -19,7 +19,7 @@ cp -r ground-up-lecture/skills/ground-up-lecture ~/.claude/skills/
 
 ## Development
 
-`dev/specimen.html` exercises every element the blank page styles. Serve it, rebuilt from `skills/ground-up-lecture/assets/blank.html` on each reload:
+`dev/specimen.html` exercises every element the template styles. Serve it, rebuilt from `skills/ground-up-lecture/assets/template.html` on each reload:
 
 ```sh
 python3 dev/preview.py

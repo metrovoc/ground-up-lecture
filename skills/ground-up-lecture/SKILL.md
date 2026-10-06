@@ -11,4 +11,4 @@ Given a topic, deliver a comprehensive lecture on it, from the fundamentals to t
 - Integrate interactive exercises, each substantial and well-placed.
 - Exploit the browser boldly: imagine the most illuminating form each idea and exercise could take, then build it, however ambitious.
 
-Deliver one standalone HTML file, starting from [blank.html](assets/blank.html); it may load external resources.
+Deliver one standalone HTML file, starting from [template.html](assets/template.html); it may load external resources.
