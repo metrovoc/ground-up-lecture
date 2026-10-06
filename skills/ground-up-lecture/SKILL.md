@@ -32,7 +32,7 @@ The template already provides the following, so the lecture doesn't build its ow
 
 Keep the template's look: a quiet, typographic page where headings carry the structure, color carries meaning, and surfaces stay flat. Design everything the lecture adds in the same language, so attention stays on the ideas and the page reads as one piece.
 
-**Type.** Inter sets the text; JetBrains Mono sets code and numbers that update in place. Labels that aren't headings are small (12–14px), in sentence case, and set apart by weight or color, like the settings label in the template's own panel.
+**Type.** Inter sets the text; JetBrains Mono sets code and numbers that update in place. Sections are numbered in their headings, the number written as plain text in the heading's own style. Labels that aren't headings are small (12–14px), in sentence case, and set apart by weight or color, like the settings label in the template's own panel.
 
 **Color.** The neutrals carry the page: `--bg`, `--surface`, `--surface-strong`, `--text`, `--text-muted`, `--border` and `--border-strong`. `--accent` marks what the reader can act on and terms being defined. `--success`, `--warning` and `--violet`, each with a pale `-bg` partner, mark kinds of content or feedback; give each a meaning once and keep it. `--series-1` to `--series-5` are for data in figures. Color that carries no meaning competes with the color that does, so leave it out.
 
