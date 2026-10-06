@@ -387,7 +387,7 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
 /* Callouts */
 
 .callout {
-  --c: var(--text-muted);
+  --c: var(--text);
   --c-bg: var(--surface);
   margin: 1.5rem 0;
   padding: 0.9rem 1.1rem;
@@ -396,12 +396,11 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
 }
 .callout > :last-child { margin-bottom: 0; }
 .callout-title { margin: 0 0 0.35rem; font-size: 14px; font-weight: 600; color: var(--c); letter-spacing: 0.01em; }
-.callout.definition { --c: var(--accent); --c-bg: var(--accent-bg); }
-.callout.theorem { --c: var(--violet); --c-bg: var(--violet-bg); }
-.callout.example { --c: var(--text); --c-bg: var(--surface); }
-.callout.insight { --c: var(--success); --c-bg: var(--success-bg); }
+.callout.accent { --c: var(--accent); --c-bg: var(--accent-bg); }
+.callout.violet { --c: var(--violet); --c-bg: var(--violet-bg); }
+.callout.success { --c: var(--success); --c-bg: var(--success-bg); }
 .callout.warning { --c: var(--warning); --c-bg: var(--warning-bg); }
-.callout.note { --c: var(--text-muted); --c-bg: transparent; border: 1px solid var(--border); }
+.callout.outline { --c: var(--text-muted); --c-bg: transparent; border: 1px solid var(--border); }
 
 /* Reveals */
 
